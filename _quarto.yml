@@ -1,0 +1,10 @@
+project:
+  type: book
+
+book:
+  chapters:
+    - index.qmd
+
+format:
+  pdf: 
+    documentclass: book

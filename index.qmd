@@ -1,0 +1,28 @@
+---
+title: "Statistical Computing Practical"
+format: html
+---
+
+## Question 1
+
+There are 2 methods to present the rows containing NA values. The first is to use the apply()  function across all rows of the airquality dataframe.
+```{r}
+# Method 1
+airquality_na_ <- airquality[apply(is.na(airquality), 1, any), ]
+head(airquality_na_)
+
+```
+
+The second method to get the same information is to use a for loop: 
+
+```{r}
+
+# Method 2
+for (i in 1:nrow(airquality)) {
+  if (sum(is.na(airquality[i, ])) > 0) {
+    print(airquality[i, ])
+  }
+}
+
+```
+
