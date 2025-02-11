@@ -4,6 +4,8 @@ project:
 book:
   chapters:
     - index.qmd
+    - TidyversePrac.qmd
+    - lowess.qmd
 
 format:
   pdf: 

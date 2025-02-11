@@ -3,17 +3,30 @@ title: "Statistical Computing Practical"
 format: html
 ---
 
-## Question 1
+
+
+The link to my Github repo : https://github.com/Mishka312/StatHonPrac1
+
+
+
+```{r} 
+#| echo: false
+library(tidyverse)
+```
+
+
+# Question 1
 
 There are 2 methods to present the rows containing NA values. The first is to use the apply()  function across all rows of the airquality dataframe.
 ```{r}
+
 # Method 1
 airquality_na_ <- airquality[apply(is.na(airquality), 1, any), ]
 head(airquality_na_)
 
 ```
 
-The second method to get the same information is to use a for loop: 
+The second method to get the same information is to use a for loop. The range in the for loop is 1 to 6 so that only the first 6 rows are displayed. The official way would be to have the following range '1:nrow(airquality)'.
 
 ```{r}
 
@@ -26,3 +39,43 @@ for (i in 1:nrow(airquality)) {
 
 ```
 
+# Question 2
+
+To calculate the average temperature and ozone levels, the NA values need to first be removed. Thereafter, the means are calculated. The average temperature and ozone levels are 77.87 and 42. 13 respectively.
+
+```{r}
+
+airquality %>% 
+  drop_na(Temp, Ozone) %>%
+  summarise(mean_Temp = mean(Temp), 
+            mean_Ozone = mean(Ozone))
+
+```
+
+# Question 3
+
+A linear regression model was fitted to the data manually and the beta values retrieved. These were -17.58 and 3.92 respectively.
+```{r}
+
+X <- as.matrix(cbind(rep(1, nrow(cars)), cars[, 1]))
+Y <- as.matrix(cars[, 2])
+
+
+beta <- solve(t(X) %*% X) %*% t(X) %*% Y
+beta
+
+```
+
+# Question 4
+
+A linear model was once again fitted to the data, this time with R's built in lm() function. The output of this proves that manually fitting a regression model yields the same beta coefficients.
+```{r}
+
+cars
+cars_model <- lm(dist ~ speed, cars)
+#cars_model <- lm(speed ~ dist, cars)
+summary(cars_model)
+
+```
+
+The beta coefficients output by the lm() function are the same as those produced using the matrix calculations.

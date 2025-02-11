@@ -1,0 +1,87 @@
+---
+title: "Prac 2: Lowess algorithm"
+forma: html
+---
+
+# Generating simulated data
+
+```{r}
+set.seed(1)
+x <- seq(1, 100, 1)
+
+e <- rnorm(100, mean = 0, sd = 0.2)
+
+y <- sin(x / 10) + e 
+
+f = 2/3
+
+dists <- dist(x)
+dists_m <- as.matrix(dists)
+
+y_hat <- numeric(length(x))
+```
+
+```{r eval=FALSE}
+#eval=FALSE
+k <- ceiling(f*length(x))
+w <- numeric(k)
+
+
+for (i in 1:length(x)) {         
+  
+  ifelse(k%%2==0, 
+         neighbs_dist <- dists_m[i, c(floor(i - (k)/2): ceiling(i + k- (k)/2))], 
+         neighbs_dist <- dists_m[i, c(floor(i - (k+1)/2): ceiling(i + k- (k+1)/2))])
+  
+  ifelse(k%%2==0, 
+         x_neighbs <- c(floor(i - (k)/2): ceiling(i + k- (k)/2)),
+         x_neighbs <- c(floor(i - (k+1)/2): ceiling(i + k- (k+1)/2)))
+  
+  y_neighbs <- x[c(x_neighbs)]
+  
+  x_and_dist <- cbind(x_neighbs, neighbs_dist)
+  
+  for (j in i:length(neighbs_dist)) {
+    W <- diag(((abs(neighbs_dist)/max(neighbs_dist))**3)**3)
+    
+  }
+    
+  betas <- solve(t(x_neighbs) %*% W %*% (x_neighbs)) %*% t(x_neighbs) %*% W %*% (y_neighbs)
+  
+  y_hat[i] <- betas[1] +betas[2] * x[i]
+  
+    
+}
+
+
+```
+
+
+# Implementing the Lowess algorithm
+
+```{r eval=FALSE}
+
+#eval = FALSE
+
+customLowess <- function(x, y, f) {
+  k <- ceiling(f*length(x))
+  
+  distances <- numeric(length(x) -1)
+  closes <- numeric(k)
+  
+  for (i in length(x)) {
+    distances[i] <- x[i] - x[-i]
+    sort(distances, decreasing = F)
+    closest <- distances[1:k]
+  } 
+  
+}
+
+```
+
+
+```{r}
+
+model2 <- lowess(x, y, iter = 0)
+plot(model2$x, model2$y, main = "lowess smoothing result")
+```
